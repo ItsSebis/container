@@ -5,10 +5,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>net.sebis</groupId>
-    <artifactId>reimerei</artifactId>
+    <artifactId>container</artifactId>
     <version>1.0</version>
 
-    <name>Reimerei</name>
+    <name>Container</name>
     <packaging>jar</packaging>
 
     <properties>
@@ -61,7 +61,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>net.sebis.reimerei.Main</mainClass>
+                            <mainClass>net.sebis.container.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
