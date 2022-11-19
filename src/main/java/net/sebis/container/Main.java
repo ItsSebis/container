@@ -19,9 +19,14 @@ public class Main {
     private final URL Examples1 = new URL("https://bwinf.de/fileadmin/bundeswettbewerb/41/container1.txt");
     private final URL Examples2 = new URL("https://bwinf.de/fileadmin/bundeswettbewerb/41/container2.txt");
     private final URL Examples3 = new URL("https://bwinf.de/fileadmin/bundeswettbewerb/41/container3.txt");
+    private final URL Examples4 = new URL("https://bwinf.de/fileadmin/bundeswettbewerb/41/container4.txt");
     private final HashMap<String, URL> urls = new HashMap<>();
 
-    private final List<HashMap<Integer, Integer>> containers = new ArrayList<>();
+    private final List<Integer> higher = new ArrayList<>();
+    private final List<Integer> lower = new ArrayList<>();
+    private int cCount = 0;
+
+    public List<Integer> nothingHigher = new ArrayList<>();
 
     private final Scanner s = new Scanner(System.in);
 
@@ -36,8 +41,8 @@ public class Main {
         System.setOut(new PrintStream(new FileOutputStream(FileDescriptor.out), true, StandardCharsets.UTF_8));
 
         collectURLMap();
-        readWords();
-        sort();
+        readContainers();
+        search();
         output();
     }
 
@@ -47,11 +52,12 @@ public class Main {
         urls.put("Examples1.txt", getExamples1());
         urls.put("Examples2.txt", getExamples2());
         urls.put("Examples3.txt", getExamples3());
+        urls.put("Examples4.txt", getExamples4());
     }
 
-    public void readWords() throws IOException {
+    public void readContainers() throws IOException {
         // Select word list
-        System.out.println("Select word pallet: ");
+        System.out.println("Select container load: ");
         int n = 0;
         for (String example : urls.keySet().stream().toList()) {
             System.out.println("   " + n + ": " + example);
@@ -84,16 +90,27 @@ public class Main {
         Scanner s = new Scanner(url.openStream());
         while (s.hasNextLine()) {
             // add to array
-            System.out.print("D: " + containers.size() + "\r");
+            String pair = s.nextLine();
+            int h = Integer.parseInt(pair.split(" ")[0]);
+            int l = Integer.parseInt(pair.split(" ")[1]);
+            higher.add(h);
+            lower.add(l);
+            if (h > cCount) {
+                cCount = h;
+            }
+            if (l > cCount) {
+                cCount = l;
+            }
+            System.out.print("D: " + higher.size() + "\r");
         }
-        System.out.println("Done - " + containers.size());
+        System.out.println("Done - " + higher.size());
     }
 
-    public void sort() throws InterruptedException {
-        System.out.println("Sorting containers in the table...");
+    public void search() throws InterruptedException {
+        System.out.println("Searching for heaviest container...");
 
         // Start sorting thread
-        Thread thread = new Thread(new Sorter(1, containers));
+        Thread thread = new Thread(new Sorter(lower, cCount));
         threads.add(thread);
         thread.start();
         while (fin < threads.size()) {
@@ -103,48 +120,14 @@ public class Main {
     }
 
     public void output() {
-
-        // Select output format
-        System.out.println("Select output type: ");
-        System.out.println("   1: Console");
-        System.out.println("   2: table.md (recommended)");
-        System.out.print("> ");
-        String input = s.nextLine();
-        while (input.isBlank() || (!input.equals("1") && !input.equals("2"))) {
-            System.out.print("> ");
-            input = s.nextLine();
-        }
-
-        // Generating Table in Github markdown format
-        System.out.println("Generating output table...");
-
-        StringBuilder table = new StringBuilder("| ");
-
-
-
-        // Outputting table in console or table markdown file
-        if (input.equals("1")) {
-            System.out.println(table);
+        // Output
+        if (nothingHigher.size() == 1) {
+            System.out.println("Container " + nothingHigher.get(0) + " is the heaviest.");
+        } else if (nothingHigher.size() == 0) {
+            System.out.println("This input is unsolvable, it ends in one loop.");
         } else {
-            writeInFile(table.toString(), "table.md");
+            System.out.println("One of the following containers is the heaviest: " + nothingHigher);
         }
-    }
-
-    public void writeInFile(String text, String fileName) {
-        // outputting text to file with BufferedWriter
-        if (text.equals("")) {
-            return;
-        }
-        try {
-            FileWriter fw = new FileWriter(fileName, true);
-            BufferedWriter bw = new BufferedWriter(fw);
-            bw.write(text);
-            bw.newLine();
-            bw.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
     }
 
     public static Main getInstance() {
@@ -165,6 +148,10 @@ public class Main {
 
     public URL getExamples3() {
         return Examples3;
+    }
+
+    public URL getExamples4() {
+        return Examples4;
     }
 
     public int getFin() {
