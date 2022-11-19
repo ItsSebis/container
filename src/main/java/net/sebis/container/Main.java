@@ -56,7 +56,7 @@ public class Main {
     }
 
     public void readContainers() throws IOException {
-        // Select word list
+        // Select container pallet
         System.out.println("Select container load: ");
         int n = 0;
         for (String example : urls.keySet().stream().toList()) {
@@ -91,10 +91,12 @@ public class Main {
         while (s.hasNextLine()) {
             // add to array
             String pair = s.nextLine();
-            int h = Integer.parseInt(pair.split(" ")[0]);
-            int l = Integer.parseInt(pair.split(" ")[1]);
-            higher.add(h);
-            lower.add(l);
+            int h = Integer.parseInt(pair.split(" ")[0]); // get heavier container
+            int l = Integer.parseInt(pair.split(" ")[1]); // get lighter container
+            higher.add(h);// add heavier container to lists
+            lower.add(l); // add lighter container to lists
+
+            // count number of containers
             if (h > cCount) {
                 cCount = h;
             }
