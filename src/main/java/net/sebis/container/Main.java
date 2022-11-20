@@ -66,7 +66,7 @@ public class Main {
         System.out.println("   " + n + ": Custom URL to text file");
         System.out.print("> ");
         String input = s.nextLine();
-        while (input.isBlank() || (!input.equals("0") && !input.equals("1") && !input.equals("2")) && !input.equals("3") && !input.equals("4")) {
+        while (input.isBlank() || (!input.equals("0") && !input.equals("1") && !input.equals("2")) && !input.equals("3") && !input.equals("4") && !input.equals("5")) {
             System.out.print("> ");
             input = s.nextLine();
         }
