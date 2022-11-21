@@ -10,7 +10,7 @@ public record Sorter(List<Integer> lower, int count) implements Runnable {
     public void run() {
 
         float done = 0;
-        for (float i = 0; i < count; i ++) {
+        for (float i = 1; i <= count; i ++) {
 
             // analyse containers
             if (!lower.contains((int) i)) {
