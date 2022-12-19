@@ -56,7 +56,7 @@ public class Main {
     }
 
     public void readContainers() throws IOException {
-        // Select container pallet
+        // Select container load
         System.out.println("Select container load: ");
         int n = 0;
         for (String example : urls.keySet().stream().toList()) {
